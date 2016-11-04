@@ -21,15 +21,13 @@
     <script src="https://www.webrtc-experiment.com/RecordRTC.js">
     </script>
     <style>
-    html {
-        background-color: #f7f7f7;
-    }
-    
-    body {
+
+    html,body {
+        padding:0;
+        margin:0;
+        height:100%;
+        min-height:100%;
         background-color: white;
-        border: 1px solid rgb(15, 158, 238);
-        margin: 1% 35%;
-        text-align: center;
     }
     
     hr {
@@ -54,7 +52,10 @@
     audio,
     video {
         border: 1px solid rgb(15, 158, 238);
-        width: 94%;
+        width: 90%;
+        margin-top: 3%;
+        margin-bottom: 1%;
+        display: block;
     }
     
     button[disabled],
@@ -62,40 +63,195 @@
         background: rgba(216, 205, 205, 0.2);
         border: 1px solid rgb(233, 224, 224);
     }
+
+    /*.traitBar {
+        width: 60%;
+        border: 1px solid black;
+        position: relative;
+        margin-left: 10%;
+        margin-top: 5px;
+        height: 20px;
+    }*/
+
+    .traitBar {
+        width: 60%;
+        border: 1px solid black;
+        position: relative;
+        margin-left: 10%;
+        margin-top: 0;
+        margin-bottom: 0;
+        height: 20px;
+    }
+
+    .jobTraitBar {
+        width: 60%;
+        border: 1px solid black;
+        position: relative;
+        margin-left: 10%;
+        height: 15px;
+        margin-top: 0;
+        margin-bottom: 0;
+        display: none;
+    }
+
+    .trait {
+        position: absolute;
+        left: 30%;
+    }
+
+    .traitFill {
+        height: 20px;
+    }
+
+    .jobTraitFill {
+        height: 15px;
+        background-color: green;
+    }
+
     </style>
 </head>
 
 <body>
-    <h1> NIPS Demonstrator Beta
-    </h1>
-    <p>
-        <video></video>
-    </p>
-    <hr />
 
-    <div>
-        <label id="percentage">0%</label>
-        <progress id="progress-bar" value="0"></progress>
-        <br />
+
+    <div style="background-color:ghostwhite; width:50%; height:100%; float:left">
+        <img src="avatar.png" alt="Tell me something about yourself" width="80%">
+        <div id="results" style="visibility: hidden;">
+            <p style="font-size: 20px; margin-left: 5%"><b>Your results:</b></p>
+            <div class="traitBar">
+                <span id="traitC" class="trait"><b>70% Conscientiusness</b></span>
+                <div id="traitFillC" class="traitFill" style="background-color: yellow; width: 70%;"></div>
+            </div> 
+            <div class="jobTraitBar"> 
+                <div class="jobTraitFill" style="width: 23%;"></div>
+            </div> <br/>
+            <div class="traitBar">
+                <span id="traitA" class="trait"><b>40% Agreeableness</b></span>
+                <div id="traitFillA" class="traitFill" style="background-color: cornflowerblue; width: 40%;"></div>
+            </div> 
+            <div class="jobTraitBar">
+                <div class="jobTraitFill" style="width: 58%;"></div>
+            </div> <br/>
+            <div class="traitBar">
+                <span id="traitN" class="trait"><b>60% Neuroticism</b></span>
+                <div id="traitFillN" class="traitFill" style="background-color: indianred; width: 60%;"></div>
+            </div> 
+            <div class="jobTraitBar">
+                <div class="jobTraitFill" style="width: 94%;"></div>
+            </div> <br/>
+            <div class="traitBar">
+                <span id="traitO" class="trait"><b>30% Openness</b></span>
+                <div id="traitFillO" class="traitFill" style="background-color: purple; width: 30%;"></div>
+            </div> 
+            <div class="jobTraitBar">
+                <div class="jobTraitFill" style="width: 36%;"></div>
+            </div> <br/>
+            <div class="traitBar">
+                <span id="traitE" class="trait"><b>90% Extraversion</b></span>
+                <div id="traitFillE" class="traitFill" style="background-color: darkorange; width: 90%;"></div>
+            </div> 
+            <div class="jobTraitBar">
+                <div class="jobTraitFill" style="width: 11%;"></div>
+            </div> <br/>
+        </div>
     </div>
 
-    <hr />
+    <div style="background-color:ghostwhite; width:50%; height:100%; float:right">
+        <div id="videoDiv">
+            <video></video>
 
-    <div>
-        <button id="btn-start-recording">Start Recording</button>
-        <button id="btn-stop-recording" disabled="">Stop Recording</button>
+            <!--<div style="margin: 0 auto; width:250px">
+                <label id="percentage">0%</label>
+                <progress id="progress-bar" value="0"></progress>
+                <br />
+            </div> -->
+
+            <div style="margin: 0 auto; width:250px">
+                <button id="btn-start-recording">Start Recording</button>
+                <!-- <button id="btn-stop-recording" disabled="">Stop Recording</button> -->
+            </div>
+        </div>
+
+        <div id="jobs" style="visibility: hidden;">
+            <p style="font-size: 20px; margin-left: 5%"><b>Job adjustment:</b></p>
+            <div class="traitBar" id="manager">
+                <span class="trait"><b>70% Manager</b></span>
+                <div class="traitFill" style="background-color: lightgreen; width: 70%;"></div>
+            </div> <br/>
+            <div class="traitBar">
+                <span class="trait"><b>40% Entrepreneur</b></span>
+                <div class="traitFill" style="background-color: orange; width: 40%;"></div>
+            </div> <br/>
+            <div class="traitBar">
+                <span class="trait"><b>60% Social</b></span>
+                <div class="traitFill" style="background-color: yellow; width: 60%;"></div>
+            </div> <br/>
+            <div class="traitBar">
+                <span class="trait"><b>30% Public Sector</b></span>
+                <div class="traitFill" style="background-color: red; width: 30%;"></div>
+            </div> <br/>
+            <div class="traitBar">
+                <span class="trait"><b>90% Scientist</b></span>
+                <div class="traitFill" style="background-color: green; width: 90%;"></div>
+            </div> <br/>
+        </div>
+        <div id="sentences" style="visibility:hidden;">
+            <p>Your aparent <b>agreeableness</b> trait is <b>low</b> for a human resources job.</p>
+            <p>Others perceive you as being <b>more agresive</b> anb <b>less cooperative</b>.</p>
+            <p>Try to talk in a <b>more easy going</b> manner</p>
+        </div>
     </div>
+
+    
 
     <script>
     // fetching DOM references
     var btnStartRecording = document.querySelector('#btn-start-recording');
-    var btnStopRecording = document.querySelector('#btn-stop-recording');
-
+    btnStartRecording.disabled = false;
+    //var btnStopRecording = document.querySelector('#btn-stop-recording');
     var videoElement = document.querySelector('video');
-
+    var videoDiv = document.querySelector('#videoDiv');
+    var jobs = document.querySelector('#jobs');
+    var sentences = document.querySelector('#sentences');
+    var results = document.querySelector('#results');
     var progressBar = document.querySelector('#progress-bar');
     var percentage = document.querySelector('#percentage');
+    var traitC = document.querySelector('#traitC');
+    var traitA = document.querySelector('#traitA');
+    var traitN = document.querySelector('#traitN');
+    var traitO = document.querySelector('#traitO');
+    var traitE = document.querySelector('#traitE');
+    var traitFillC = document.querySelector('#traitFillC');
+    var traitFillA = document.querySelector('#traitFillA');
+    var traitFillN = document.querySelector('#traitFillN');
+    var traitFillO = document.querySelector('#traitFillO');
+    var traitFillE = document.querySelector('#traitFillE');
+    var manager = document.querySelector('#manager');
     </script>
+
+    // <script>
+    //     var text = "the code to run";
+    //     var bad = "EVAL "  + JSON.stringify(text) + " 0\r\n";
+    //     var x = new XMLHttpRequest();
+    //     x.open("POST", "http://localhost:5000/test");
+    //     x.send(bad);
+
+    //     function readBody(xhr) {
+    //         var data;
+    //         if (!xhr.responseType || xhr.responseType === "text") {
+    //             data = xhr.responseText;
+    //         } else if (xhr.responseType === "document") {
+    //             data = xhr.responseXML;
+    //         } else {
+    //             data = xhr.response;
+    //         }
+    //         return data;
+    //     };
+
+    //     traitC.innerHTML = readBody(x);
+        
+
+    // </script>
 
     <script>
     // global variables
@@ -160,13 +316,36 @@
             videoElement.play();
             videoElement.muted = false;
             videoElement.controls = true;
-
-            var h2 = document.createElement('h2');
-            h2.innerHTML = '<a href="' + videoElement.src + '">' + videoElement.src + '</a>';
-            document.body.appendChild(h2);
         });
 
         if (mediaStream) mediaStream.stop();
+        
+    }
+
+    function showResuts() {
+        valueC = 0.34;
+        valueA = 0.67;
+        valueN = 0.45;
+        valueO = 0.92;
+        valueE = 0.23;
+        valueC = valueC*100;
+        valueA = valueA*100;
+        valueN = valueN*100;
+        valueO = valueO*100;
+        valueE = valueE*100;
+        bold = "<b>";
+        pC = valueC.toString();
+        percent = "%";
+        percentC = pC.concat(percent);
+        C = " Conscientiousness</b>"
+        newC = bold.concat(percentC, C);
+        traitC.innerHTML =  newC;
+        traitFillC.style.width = percentC;
+        results.style.visibility = "visible";
+        videoDiv.style.display = "none";
+        jobs.style.visibility = "visible";
+        
+        
     }
 
     // XHR2/FormData
@@ -192,7 +371,7 @@
         request.send(data);
     }
 
-    // generating random string
+    // generating random string (for the name of the file)
     function generateRandomString() {
         if (window.crypto) {
             var a = window.crypto.getRandomValues(new Uint32Array(3)),
@@ -227,6 +406,7 @@
             // if record only audio (either wav or ogg)
             if (isRecordOnlyAudio) postFiles(audio);
         });
+        
     }
     </script>
 
@@ -280,15 +460,21 @@
 
             audioRecorder.startRecording();
 
-            // enable stop-recording button
-            btnStopRecording.disabled = false;
+            setTimeout(stopRecording, 3000);
         });
     };
 
+    manager.onclick = function() {
+        var bars =     document.getElementsByClassName('jobTraitBar');
+        for(i=0; i<bars.length; i++) {
+            bars[i].style.display =  "block";
+        }
+        sentences.style.visibility = "visible";
+    };
 
-    btnStopRecording.onclick = function() {
+
+    function stopRecording() {
         btnStartRecording.disabled = false;
-        btnStopRecording.disabled = true;
 
         if (isRecordOnlyAudio) {
             audioRecorder.stopRecording(onStopRecording);
@@ -301,6 +487,7 @@
                 });
             });
         }
+        showResuts();
     };
     </script>
 

@@ -18,7 +18,8 @@ function route(handle, pathname, response, postData) {
         webm: 'webm',
         mp4: 'mp4',
         wav: 'wav',
-        ogg: 'ogg'
+        ogg: 'ogg',
+        png: 'png'
     };
 
     if ('function' === typeof handle[pathname]) {
