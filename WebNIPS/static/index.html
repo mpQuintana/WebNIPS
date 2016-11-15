@@ -1,9 +1,3 @@
-<!--
-// Muaz Khan     - www.MuazKhan.com
-// MIT License   - www.WebRTC-Experiment.com/licence
-// Experiments   - github.com/muaz-khan/WebRTC-Experiment
--->
-
 <!DOCTYPE html>
 <html>
 
@@ -15,11 +9,14 @@
         document.write('<h1 style="color:red;">Please load this HTML file on HTTP or HTTPS.</h1>');
     }
     </script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-    <link rel="author" type="text/html" href="https://plus.google.com/+MuazKhan">
-    <meta name="author" content="Muaz Khan">
     <script src="https://www.webrtc-experiment.com/RecordRTC.js">
     </script>
+    <script src="FaceDetection/bin/js/facelib.asm.js"></script> <!-- asm.js: facial analysis library -->
+    <script src="FaceDetection/bin/js/camface.js"></script> <!-- facial analysis library (captures webcam, coordinates the pipeline) -->
+    <script src="FaceDetection/bin/js/face.js"></script>
+    <script src="FaceDetection/bin/js/ccv.js"></script>
     <style>
 
     html,body {
@@ -53,9 +50,15 @@
     video {
         border: 1px solid rgb(15, 158, 238);
         width: 90%;
+        margin-left: 5%;
         margin-top: 3%;
         margin-bottom: 1%;
         display: block;
+    }
+
+    canvas {
+        margin-left: 5%;
+        margin-top: 3%
     }
     
     button[disabled],
@@ -114,8 +117,12 @@
 <body>
 
 
-    <div style="background-color:ghostwhite; width:50%; height:100%; float:left">
-        <img src="avatar.png" alt="Tell me something about yourself" width="80%">
+    <div style="width:50%; height:100%; float:left">
+        <video id="videoAvatar" preload="none">
+          <source src="avatarVideo.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+
         <div id="results" style="visibility: hidden;">
             <p style="font-size: 20px; margin-left: 5%"><b>Your results:</b></p>
             <div class="traitBar">
@@ -156,9 +163,10 @@
         </div>
     </div>
 
-    <div style="background-color:ghostwhite; width:50%; height:100%; float:right">
+    <div style="width:50%; height:100%; float:right">
         <div id="videoDiv">
-            <video></video>
+            <canvas id="cvs"></canvas>
+            <video id="videoRecord" style="display :none;"></video>
 
             <!--<div style="margin: 0 auto; width:250px">
                 <label id="percentage">0%</label>
@@ -167,38 +175,14 @@
             </div> -->
 
             <div style="margin: 0 auto; width:250px">
-                <button id="btn-start-recording">Start Recording</button>
+                <button id="btn-start-recording" disabled="">Start Recording</button>
                 <!-- <button id="btn-stop-recording" disabled="">Stop Recording</button> -->
             </div>
         </div>
 
         <div id="jobs" style="visibility: hidden;">
-            <p style="font-size: 20px; margin-left: 5%"><b>Job adjustment:</b></p>
-            <div class="traitBar" id="manager">
-                <span class="trait"><b>70% Manager</b></span>
-                <div class="traitFill" style="background-color: lightgreen; width: 70%;"></div>
-            </div> <br/>
-            <div class="traitBar">
-                <span class="trait"><b>40% Entrepreneur</b></span>
-                <div class="traitFill" style="background-color: orange; width: 40%;"></div>
-            </div> <br/>
-            <div class="traitBar">
-                <span class="trait"><b>60% Social</b></span>
-                <div class="traitFill" style="background-color: yellow; width: 60%;"></div>
-            </div> <br/>
-            <div class="traitBar">
-                <span class="trait"><b>30% Public Sector</b></span>
-                <div class="traitFill" style="background-color: red; width: 30%;"></div>
-            </div> <br/>
-            <div class="traitBar">
-                <span class="trait"><b>90% Scientist</b></span>
-                <div class="traitFill" style="background-color: green; width: 90%;"></div>
-            </div> <br/>
-        </div>
-        <div id="sentences" style="visibility:hidden;">
-            <p>Your aparent <b>agreeableness</b> trait is <b>low</b> for a human resources job.</p>
-            <p>Others perceive you as being <b>more agresive</b> anb <b>less cooperative</b>.</p>
-            <p>Try to talk in a <b>more easy going</b> manner</p>
+            <div id="pieChartJobs" style="width: 100%; height: 500px;">
+            </div>
         </div>
     </div>
 
@@ -207,10 +191,11 @@
     <script>
     // fetching DOM references
     var btnStartRecording = document.querySelector('#btn-start-recording');
-    btnStartRecording.disabled = false;
+    btnStartRecording.disabled = true;
     //var btnStopRecording = document.querySelector('#btn-stop-recording');
-    var videoElement = document.querySelector('video');
+    var videoElement = document.querySelector('#videoRecord');
     var videoDiv = document.querySelector('#videoDiv');
+    var videoAvatar = document.querySelector('#videoAvatar');
     var jobs = document.querySelector('#jobs');
     var sentences = document.querySelector('#sentences');
     var results = document.querySelector('#results');
@@ -228,30 +213,6 @@
     var traitFillE = document.querySelector('#traitFillE');
     var manager = document.querySelector('#manager');
     </script>
-
-    // <script>
-    //     var text = "the code to run";
-    //     var bad = "EVAL "  + JSON.stringify(text) + " 0\r\n";
-    //     var x = new XMLHttpRequest();
-    //     x.open("POST", "http://localhost:5000/test");
-    //     x.send(bad);
-
-    //     function readBody(xhr) {
-    //         var data;
-    //         if (!xhr.responseType || xhr.responseType === "text") {
-    //             data = xhr.responseText;
-    //         } else if (xhr.responseType === "document") {
-    //             data = xhr.responseXML;
-    //         } else {
-    //             data = xhr.response;
-    //         }
-    //         return data;
-    //     };
-
-    //     traitC.innerHTML = readBody(x);
-        
-
-    // </script>
 
     <script>
     // global variables
@@ -277,6 +238,174 @@
         videoElement.controls = true;
         parentNode.appendChild(videoElement);
     }
+    </script>
+
+    <!--  FACE DETECTION -->
+    <script type="text/javascript">
+        var canvas = document.getElementById('cvs');
+        firstTime = true;
+        var camface = new Camface({
+            canvas: canvas,
+            callback: function(bbox, exprs){
+                var ctx = this._context;
+                //console.log(bbox);
+                // Lets draw the face bounding box...
+                ctx.strokeStyle = 'green';
+                ctx.strokeRect(bbox[0], bbox[1], bbox[2], bbox[3]);
+
+                if(firstTime && bbox[1] > 100){
+                    onFaceDetected();
+                    firstTime = false;
+                }
+            }
+        });
+
+        camface.start();
+
+        function onFaceDetected(){
+            videoAvatar.play();
+            videoAvatar.style.display = "block";
+        }
+
+        function onAvatarVideoEnd(){
+            btnStartRecording.disabled = false;
+        }
+        videoAvatar.addEventListener('ended', onAvatarVideoEnd,false);
+    </script>
+
+    <!-- CALCULATE AND SHOW RESULTS -->
+    <script type="text/javascript">
+        function getResults() {
+            return [Math.random(), Math.random(), Math.random(), Math.random(), Math.random()]
+        }
+
+        function showResuts() {
+            OCEANvalues = getResults();
+            bold = "<b>";
+            percent = "%";
+
+            valueO = OCEANvalues[0]*100;
+            pO = valueO.toFixed(2);
+            percentO = pO.concat(percent);
+            O = " Openness</b>"
+            newO = bold.concat(percentO, O);
+            traitO.innerHTML =  newO;
+            traitFillO.style.width = percentO;
+
+            valueC = OCEANvalues[1]*100;
+            pC = valueC.toFixed(2);
+            percentC = pC.concat(percent);
+            C = " Conscientiousness</b>"
+            newC = bold.concat(percentC, C);
+            traitC.innerHTML =  newC;
+            traitFillC.style.width = percentC;
+
+            valueE = OCEANvalues[2]*100;
+            pE = valueE.toFixed(2);
+            percentE = pE.concat(percent);
+            E = " Extraversion</b>"
+            newE = bold.concat(percentE, E);
+            traitE.innerHTML =  newE;
+            traitFillE.style.width = percentE;
+
+            valueA = OCEANvalues[3]*100;
+            pA = valueA.toFixed(2);
+            percentA = pA.concat(percent);
+            A = " Agreeableness</b>"
+            newA = bold.concat(percentA, A);
+            traitA.innerHTML =  newA;
+            traitFillA.style.width = percentA;
+
+            valueN = OCEANvalues[4]*100;
+            pN = valueN.toFixed(2);
+            percentN = pN.concat(percent);
+            N = " Neuroticism</b>"
+            newN = bold.concat(percentN, N);
+            traitN.innerHTML =  newN;
+            traitFillN.style.width = percentN;
+
+
+            results.style.visibility = "visible";
+            videoDiv.style.display = "none";
+            showJobResults(OCEANvalues);
+        }
+
+        function calculateDistanceFromIdeal(value, idealRange){
+            if(idealRange === 'low'){
+                if(value <= 0.3333){
+                    return 0;
+                } else{
+                    return Math.pow(value - 0.3333, 2);
+                }  
+            }
+
+            else if(idealRange === 'avg'){
+                if(value <= 0.3333){
+                    return Math.pow(value - 0.3333, 2);
+                } else if (value >= 0.6667){
+                    return Math.pow(0.6667 - value, 2);
+                } else return 0;
+            }
+
+            else if(idealRange === 'high'){
+                if(value >= 0.6667){
+                    return 0;
+                } else{
+                    return Math.pow(0.6667 - value, 2);
+                }
+            }
+        }
+
+        function calculateJobAdjustmentFromOCEAN(OCEANvalues){
+            var manager = 100 - 100*Math.sqrt(
+                calculateDistanceFromIdeal(OCEANvalues[0], 'avg')+
+                calculateDistanceFromIdeal(OCEANvalues[1], 'high')+
+                calculateDistanceFromIdeal(OCEANvalues[2], 'avg')+
+                calculateDistanceFromIdeal(OCEANvalues[3], 'high')+
+                calculateDistanceFromIdeal(OCEANvalues[4], 'low') )/5/0.6667;
+            var entrepreneur = 100 - 100*Math.sqrt(
+                calculateDistanceFromIdeal(OCEANvalues[0], 'high')+
+                calculateDistanceFromIdeal(OCEANvalues[1], 'high')+
+                calculateDistanceFromIdeal(OCEANvalues[4], 'high') )/3/0.6667;
+            var social = 100 - 100*Math.sqrt(
+                calculateDistanceFromIdeal(OCEANvalues[2], 'high')+
+                calculateDistanceFromIdeal(OCEANvalues[3], 'high')+
+                calculateDistanceFromIdeal(OCEANvalues[4], 'avg') )/3/0.6667;
+            var publicSector = 100 - 100*Math.sqrt(
+                calculateDistanceFromIdeal(OCEANvalues[1], 'high')+
+                calculateDistanceFromIdeal(OCEANvalues[4], 'low') )/2/0.6667;
+            var scientists = 100 - 100*Math.sqrt(
+                calculateDistanceFromIdeal(OCEANvalues[0], 'high')+
+                calculateDistanceFromIdeal(OCEANvalues[2], 'low') )/2/0.6667;
+            return [manager, entrepreneur, social, publicSector, scientists];
+        }
+
+        function showJobResults(OCEANvalues){
+          var jobAdjustment = calculateJobAdjustmentFromOCEAN(OCEANvalues);
+          google.charts.load('current', {'packages':['corechart']});
+          google.charts.setOnLoadCallback(drawChart);
+          function drawChart() {
+
+            var data = google.visualization.arrayToDataTable([
+              ['Job', 'Adjustment'],
+              ['Manager',       jobAdjustment[0]],
+              ['Entrepreneur',  jobAdjustment[1]],
+              ['Social',        jobAdjustment[2]],
+              ['Public Sector', jobAdjustment[3]],
+              ['Scientists',    jobAdjustment[4]],
+            ]);
+
+            var options = {
+              title: 'Job Adjustment',
+              is3D: true,
+            };
+
+
+            var chart = new google.visualization.PieChart(document.getElementById('pieChartJobs'));
+            chart.draw(data, options);
+          }
+          jobs.style.visibility = "visible";
+        }
     </script>
 
     <script>
@@ -311,40 +440,14 @@
         videoElement.poster = '/ajax-loader.gif';
 
         xhr('/upload', JSON.stringify(files), function(_fileName) {
-            var href = location.href.substr(0, location.href.lastIndexOf('/') + 1);
-            videoElement.src = href + 'uploads/' + _fileName;
-            videoElement.play();
-            videoElement.muted = false;
-            videoElement.controls = true;
+            //var href = location.href.substr(0, location.href.lastIndexOf('/') + 1);
+            //videoElement.src = href + 'uploads/' + _fileName;
+            //videoElement.play();
+            //videoElement.muted = false;
+            //videoElement.controls = true;
         });
 
         if (mediaStream) mediaStream.stop();
-        
-    }
-
-    function showResuts() {
-        valueC = 0.34;
-        valueA = 0.67;
-        valueN = 0.45;
-        valueO = 0.92;
-        valueE = 0.23;
-        valueC = valueC*100;
-        valueA = valueA*100;
-        valueN = valueN*100;
-        valueO = valueO*100;
-        valueE = valueE*100;
-        bold = "<b>";
-        pC = valueC.toString();
-        percent = "%";
-        percentC = pC.concat(percent);
-        C = " Conscientiousness</b>"
-        newC = bold.concat(percentC, C);
-        traitC.innerHTML =  newC;
-        traitFillC.style.width = percentC;
-        results.style.visibility = "visible";
-        videoDiv.style.display = "none";
-        jobs.style.visibility = "visible";
-        
         
     }
 
@@ -357,7 +460,7 @@
             }
         };
 
-        request.upload.onprogress = function(event) {
+        /*request.upload.onprogress = function(event) {
             progressBar.max = event.total;
             progressBar.value = event.loaded;
             progressBar.innerHTML = 'Upload Progress ' + Math.round(event.loaded / event.total * 100) + "%";
@@ -366,7 +469,7 @@
         request.upload.onload = function() {
             percentage.style.display = 'none';
             progressBar.style.display = 'none';
-        };
+        };*/
         request.open('POST', url);
         request.send(data);
     }
@@ -428,7 +531,9 @@
     <script>
     // UI events handling
     btnStartRecording.onclick = function() {
+        
         btnStartRecording.disabled = true;
+
 
         captureUserMedia(function(stream) {
             mediaStream = stream;
@@ -460,21 +565,24 @@
 
             audioRecorder.startRecording();
 
-            setTimeout(stopRecording, 3000);
+            setTimeout(stopRecording, 15000);
         });
     };
 
-    manager.onclick = function() {
+    /*onclick = function() {
         var bars =     document.getElementsByClassName('jobTraitBar');
         for(i=0; i<bars.length; i++) {
             bars[i].style.display =  "block";
         }
         sentences.style.visibility = "visible";
-    };
+    }; 
+    */
 
 
     function stopRecording() {
         btnStartRecording.disabled = false;
+        camface.stop();
+        canvas.style.display = "none";
 
         if (isRecordOnlyAudio) {
             audioRecorder.stopRecording(onStopRecording);
@@ -493,7 +601,7 @@
 
     <script>
     window.onbeforeunload = function() {
-        startRecording.disabled = false;
+        btnStartRecording.disabled = false;
     };
     </script>
 

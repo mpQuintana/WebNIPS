@@ -1,0 +1,78 @@
+----------------------------------------------------
+-- FACE DETECTION
+----------------------------------------------------
+
+BUILD AND RUN FACE DETECTOR IN THE BROWSER
+In order to run the face detector in the browser you have first to build it by using the provided make file. Just open the command line, go to the directory where you have downloaded the code and call make. The makefile will compile the C++ code in emscripten. This will generate binary JavaScript files in /bin/js. 
+
+After building you are ready to go. Just open bin/main.html or bin/test1.html in your browser. The first will require the use of the camera. Once you agree, it will start capturing the camera and look for faces. The former will apply the face detector to a test image. 
+
+It has been tested with Firefox and Chrome. Not tested in IE. Safari is causing problems. 
+
+An usual development pipeline would be:
+1. Edit C++ code. 
+2. Make sure C++ compiles with your favourite C++ compiler. 
+3. Once you have the C++ code up and running call emscriten to pass it to JS. Usually if it compiles in C++ it will compile in JS as well. 
+4. Open the main.html file.    
+
+
+DEPENDECIES
+The code translation to JS depends on emscripten. Check out their page instructions about installation. 
+http://kripken.github.io/emscripten-site/docs/getting_started/downloads.html
+
+
+----------------------------------------------------
+-- CAMFACE JAVASCRIPT LIBRARY
+----------------------------------------------------
+
+Camface is a javascript library for the processing of videos in real-time. It performs
+face detection and facial expression recognition, delegating the cost-intensive tasks
+to a module programmed in c++ and transpiled to javascript.
+
+
+BUILDING THE PROJECT
+
+- Run the 'make' command to compile the c++ library (you will need emscripten)
+- The library is now placed in ./bin/js/facelib.asm.js
+- Ready to run! An usage example is found in ./bin/main.html
+
+
+LIBRARY USAGE
+
+The library is encapsulated in the javascript class Camface, found in ./bin/js/camface.js
+and makes use of the asm.js module found in ./bin/js/facelib.asm.js. In order to use the
+library, supposing your project root is in ./bin, first include both files on your site
+header as follows:
+
+<script src="js/facelib.asm.js"></script>
+<script src="js/camface.js"></script>
+
+The library can be instantiated by creating a new instance of Camface as follows:
+
+var camface = new Camface();
+
+This will build a video capture and analysis framework, which can be run/stopped at any
+time with camface.start() and camface.stop(). While these calls are enough to start
+processing, you'll usually want to display the feedback into a canvas/video source and/or
+receive the analysis results (face bounding box and emotions vector) after processing
+each frame. This can be done by passing a javascript object to the constructor with the
+following optional keys:
+
+- width: width of the captured video (640 by default)
+- height: height of the captured video (480 by default)
+- video: video element where the webcam is captured (if not provided, uses a detached one)
+- canvas: canvas element where frames are captured (if not provided, uses a detached one)
+- callback: Function to call after processing each frame. Takes two arguments:
+      - Bounding box (Uint16Array of length 4: left, top, width, height)
+      - Emotion intensities (Float32Array of length 7)
+
+The following calls are available once constructed the library instance:
+
+camface.start():
+    Start capturing the webcam and applying face detection/emotion recognition.
+
+camface.stop():
+    Stop capturing and processing.
+
+camface.setCallback(callback):
+    Assigns the 'callback' function as callback after processing a frame.
