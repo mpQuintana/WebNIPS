@@ -17,99 +17,318 @@
     <script src="FaceDetection/bin/js/camface.js"></script> <!-- facial analysis library (captures webcam, coordinates the pipeline) -->
     <script src="FaceDetection/bin/js/face.js"></script>
     <script src="FaceDetection/bin/js/ccv.js"></script>
+    <link rel="stylesheet" href="common.css">
     <style>
+        html,body {
+            padding:0;
+            margin:0;
+            height:100%;
+            min-height:100%;
+            background-color: white;
+        }
 
-    html,body {
-        padding:0;
-        margin:0;
-        height:100%;
-        min-height:100%;
-        background-color: white;
-    }
-    
-    hr {
-        border: 0;
-        border-top: 1px solid rgb(15, 158, 238);
-    }
-    
-    a {
-        color: #2844FA;
-        text-decoration: none;
-    }
-    
-    a:hover,
-    a:focus {
-        color: #1B29A4;
-    }
-    
-    a:active {
-        color: #000;
-    }
-    
-    audio,
-    video {
-        border: 1px solid rgb(15, 158, 238);
-        width: 90%;
-        margin-left: 5%;
-        margin-top: 3%;
-        margin-bottom: 1%;
-        display: block;
-    }
+        hr {
+            border: 0;
+            border-top: 1px solid rgb(15, 158, 238);
+        }
 
-    canvas {
-        margin-left: 5%;
-        margin-top: 3%
-    }
-    
-    button[disabled],
-    input[disabled] {
-        background: rgba(216, 205, 205, 0.2);
-        border: 1px solid rgb(233, 224, 224);
-    }
+        a {
+            color: #2844FA;
+            text-decoration: none;
+        }
 
-    /*.traitBar {
-        width: 60%;
-        border: 1px solid black;
-        position: relative;
-        margin-left: 10%;
-        margin-top: 5px;
-        height: 20px;
-    }*/
+        a:hover,
+        a:focus {
+            color: #1B29A4;
+        }
 
-    .traitBar {
-        width: 60%;
-        border: 1px solid black;
-        position: relative;
-        margin-left: 10%;
-        margin-top: 0;
-        margin-bottom: 0;
-        height: 20px;
-    }
+        a:active {
+            color: #000;
+        }
 
-    .jobTraitBar {
-        width: 60%;
-        border: 1px solid black;
-        position: relative;
-        margin-left: 10%;
-        height: 15px;
-        margin-top: 0;
-        margin-bottom: 0;
-        display: none;
-    }
+        audio,
+        video {
+            border: 1px solid rgb(15, 158, 238);
+            width: 90%;
+            margin-left: 5%;
+            margin-top: 3%;
+            margin-bottom: 1%;
+            display: none;
+        }
 
-    .trait {
-        position: absolute;
-        left: 30%;
-    }
+        canvas {
+            margin-left: 5%;
+            margin-top: 3%;
+        }
 
-    .traitFill {
-        height: 20px;
-    }
+        button[disabled],
+        input[disabled] {
+            background: rgba(216, 205, 205, 0.2);
+            border: 1px solid rgb(233, 224, 224);
+        }
 
-    .jobTraitFill {
-        height: 15px;
-        background-color: green;
-    }
+        /*.traitBar {
+            width: 60%;
+            border: 1px solid black;
+            position: relative;
+            margin-left: 10%;
+            margin-top: 5px;
+            height: 20px;
+        }*/
+
+        .traitBar {
+            width: 60%;
+            border: 1px solid black;
+            position: relative;
+            margin-left: 10%;
+            margin-top: 0;
+            margin-bottom: 0;
+            height: 20px;
+        }
+
+        .jobTraitBar {
+            width: 60%;
+            border: 1px solid black;
+            position: relative;
+            margin-left: 10%;
+            height: 15px;
+            margin-top: 0;
+            margin-bottom: 0;
+            display: none;
+        }
+
+        .trait {
+            position: absolute;
+            left: 30%;
+        }
+
+        .traitFill {
+            height: 20px;
+        }
+
+        .jobTraitFill {
+            height: 15px;
+            background-color: green;
+        }
+
+        /* Table */
+        #data-table {
+            border: none; /* Turn off all borders */
+            border-top: 1px solid #ccc;
+            width: 540px;
+        }
+        #data-table caption {
+            color: #545454;
+            font-size: 14px;
+            font-weight: normal;
+            line-height: 20px;
+            margin: 0 0 20px 0;
+            padding: 0;
+            text-align: center;
+        }
+        #data-table thead {
+            background: #f0f0f0;
+        }
+        #data-table th, 
+        #data-table td {
+            border: none; /* Turn off all borders */
+            border-bottom: 1px solid #ccc;
+            margin: 0;
+            padding: 10px;
+            text-align: left;   
+        }
+
+        /* Toggle */
+        .toggles {
+            background: #ebebeb;    
+            color: #545454;
+            height: 20px;
+            padding: 15px;
+        }
+        .toggles p {
+            margin: 0;
+        }
+        .toggles a {
+            background: #222;
+            border-radius: 3px; 
+            color: #fff;
+            display: block;
+            float: left;
+            margin: 0 10px 0 0;
+            padding: 0 6px;
+            text-decoration: none;
+        }
+        .toggles a:hover {
+            background: #666;
+        }
+        #reset-graph-button {
+            float:right;
+        }
+
+        /* Graph */
+        /* Containers */
+        #wrapper {
+            height: 420px;
+            left: 50%;
+            margin: -210px 0 0 -270px;
+            position: absolute;
+            top: 50%;   
+            width: 540px;
+        }
+        #figure {
+            height: 380px;
+            position: relative;
+        }
+        #figure ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        .graph {
+            height: 283px;
+            position: relative;
+        }
+
+        /* Legend */
+        .legend {
+            background: #f0f0f0;
+            border-radius: 4px;
+            bottom: 0;
+            position: absolute;
+            text-align: left;
+            width: 540px;   
+        }
+        .legend li {
+            display: block;
+            float: left;
+            height: 20px;
+            margin: 0;
+            padding: 10px 30px;
+            width: 120px;
+        }
+        .legend span.icon {
+            background-position: 50% 0;
+            border-radius: 2px;
+            display: block;
+            float: left;
+            height: 16px;
+            margin: 2px 10px 0 0;
+            width: 16px;    
+        }
+
+        /* X-Axis */
+        .x-axis {
+            bottom: 0;
+            color: #555;
+            position: absolute;
+            text-align: center;
+            width: 540px;
+        }
+        .x-axis li {
+            float: left;
+            margin: 0 15px;
+            padding: 5px 0;
+            width: 76px;    
+        }
+
+        /* Y-Axis */
+        .y-axis {
+            color: #555;
+            position: absolute;
+            text-align: right;
+            width: 100%;
+        }
+        .y-axis li {
+            border-top: 1px solid #ccc;
+            display: block;
+            height: 62px;
+            width: 100%;
+        }
+        .y-axis li span {
+            display: block;
+            margin: -10px 0 0 -60px;
+            padding: 0 10px;
+            width: 40px;
+        }
+
+        /* Graph Bars */
+        .bars {
+            height: 253px;
+            position: absolute;
+            width: 100%;
+            z-index: 10;
+        }
+        .bar-group {
+            float: left;
+            height: 100%;
+            margin: 0 15px;
+            position: relative;
+            width: 100%;
+        }
+        .bar {
+            border-radius: 3px 3px 0 0;
+            bottom: 0;
+            cursor: pointer;    
+            height: 0;
+            position: absolute;
+            text-align: center;
+            width: 20%;
+        }
+        .bar.fig0 {
+            left: 0;
+        }
+        .bar.fig1 {
+            left: 20%;
+        }
+        .bar.fig2 {
+            left: 40%;
+        }
+        .bar.fig3 {
+            left: 60%;
+        }
+        .bar.fig4 {
+            left: 80%;
+        }
+        .bar span {
+            background: #fefefe;
+            border-radius: 3px;
+            left: -8px;
+            display: none;
+            margin: 0;
+            position: relative;
+            text-shadow: rgba(255, 255, 255, 0.8) 0 1px 0;
+            width: 40px;
+            z-index: 20;
+            
+            -webkit-box-shadow: rgba(0, 0, 0, 0.6) 0 1px 4px;
+            box-shadow: rgba(0, 0, 0, 0.6) 0 1px 4px;
+        }
+        .bar:hover span {
+            display: block;
+            margin-top: -25px;
+        }
+
+        #data-table {
+            display: none;
+        }
+        .bar span {
+            background: #fefefe  0 100% repeat-x;
+        }
+        .fig0 {
+            background: #747474  0 0 repeat-y;
+        }
+        .fig1 {
+            background: #65c2e8  0 0 repeat-y;
+        }
+        .fig2 {
+            background: #eea151  0 0 repeat-y;
+        }
+        .fig3 {
+            background: #6fdaa0  0 0 repeat-y;
+        }
+        .fig4 {
+            background: #cc7fe5  0 0 repeat-y;
+        }
 
     </style>
 </head>
@@ -179,9 +398,41 @@
                 <!-- <button id="btn-stop-recording" disabled="">Stop Recording</button> -->
             </div>
         </div>
-
-        <div id="jobs" style="visibility: hidden;">
-            <div id="pieChartJobs" style="width: 100%; height: 500px;">
+            <!-- <div id="pieChartJobs" style="width: 100%; height: 500px;">
+            </div> -->
+        <div id="wrapperJobs" style="display:block">
+            <div class="chartJobs">
+                <h2>Job Adjustment</h2>
+                <table id="data-table" border="1" cellpadding="10" cellspacing="0" >
+                    <thead>
+                        <tr>
+                            <td>&nbsp;</td>
+                            <th scope="col">Score</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th scope="row">Manager</th>
+                            <td>70</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Social</th>
+                            <td>23</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Entrepreneur</th>
+                            <td>12</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Public Sector</th>
+                            <td>100</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Scientist</th>
+                            <td>3</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
@@ -196,7 +447,7 @@
     var videoElement = document.querySelector('#videoRecord');
     var videoDiv = document.querySelector('#videoDiv');
     var videoAvatar = document.querySelector('#videoAvatar');
-    var jobs = document.querySelector('#jobs');
+    var jobs = document.querySelector('#wrapperJobs');
     var sentences = document.querySelector('#sentences');
     var results = document.querySelector('#results');
     var progressBar = document.querySelector('#progress-bar');
@@ -382,7 +633,7 @@
 
         function showJobResults(OCEANvalues){
           var jobAdjustment = calculateJobAdjustmentFromOCEAN(OCEANvalues);
-          google.charts.load('current', {'packages':['corechart']});
+          /*google.charts.load('current', {'packages':['corechart']});
           google.charts.setOnLoadCallback(drawChart);
           function drawChart() {
 
@@ -403,12 +654,89 @@
 
             var chart = new google.visualization.PieChart(document.getElementById('pieChartJobs'));
             chart.draw(data, options);
-          }
-          jobs.style.visibility = "visible";
+          }*/
+          jobs.style.display = "block";
+
+          
+          //createGraph('#data-table', '.chart');
         }
     </script>
 
+
+
     <script>
+    // UI events handling
+    btnStartRecording.onclick = function() {
+        
+        btnStartRecording.disabled = true;
+
+
+        captureUserMedia(function(stream) {
+            mediaStream = stream;
+
+            videoElement.src = window.URL.createObjectURL(stream);
+            videoElement.play();
+            videoElement.muted = true;
+            videoElement.controls = false;
+
+            // it is second parameter of the RecordRTC
+            var audioConfig = {};
+            if (!isRecordOnlyAudio) {
+                audioConfig.onAudioProcessStarted = function() {
+                    // invoke video recorder in this callback
+                    // to get maximum sync
+                    videoRecorder.startRecording();
+                };
+            }
+
+            audioRecorder = RecordRTC(stream, audioConfig);
+
+            if (!isRecordOnlyAudio) {
+                // it is second parameter of the RecordRTC
+                var videoConfig = {
+                    type: 'video'
+                };
+                videoRecorder = RecordRTC(stream, videoConfig);
+            }
+
+            audioRecorder.startRecording();
+
+            setTimeout(stopRecording, 3000);
+        });
+    };
+
+    /*onclick = function() {
+        var bars =     document.getElementsByClassName('jobTraitBar');
+        for(i=0; i<bars.length; i++) {
+            bars[i].style.display =  "block";
+        }
+        sentences.style.visibility = "visible";
+    }; 
+    */
+
+
+    function stopRecording() {
+        btnStartRecording.disabled = true;
+        btnStartRecording.style.display = "none";
+        camface.stop();
+        canvas.style.display = "none";
+
+        if (isRecordOnlyAudio) {
+            audioRecorder.stopRecording(onStopRecording);
+        }
+
+        if (!isRecordOnlyAudio) {
+            audioRecorder.stopRecording(function() {
+                videoRecorder.stopRecording(function() {
+                    onStopRecording();
+                });
+            });
+        }
+        showResuts();
+    };
+    </script>
+
+        <script>
     // reusable helpers
 
     // this function submits both audio/video or single recorded blob to nodejs server
@@ -529,81 +857,12 @@
     </script>
 
     <script>
-    // UI events handling
-    btnStartRecording.onclick = function() {
-        
-        btnStartRecording.disabled = true;
-
-
-        captureUserMedia(function(stream) {
-            mediaStream = stream;
-
-            videoElement.src = window.URL.createObjectURL(stream);
-            videoElement.play();
-            videoElement.muted = true;
-            videoElement.controls = false;
-
-            // it is second parameter of the RecordRTC
-            var audioConfig = {};
-            if (!isRecordOnlyAudio) {
-                audioConfig.onAudioProcessStarted = function() {
-                    // invoke video recorder in this callback
-                    // to get maximum sync
-                    videoRecorder.startRecording();
-                };
-            }
-
-            audioRecorder = RecordRTC(stream, audioConfig);
-
-            if (!isRecordOnlyAudio) {
-                // it is second parameter of the RecordRTC
-                var videoConfig = {
-                    type: 'video'
-                };
-                videoRecorder = RecordRTC(stream, videoConfig);
-            }
-
-            audioRecorder.startRecording();
-
-            setTimeout(stopRecording, 15000);
-        });
-    };
-
-    /*onclick = function() {
-        var bars =     document.getElementsByClassName('jobTraitBar');
-        for(i=0; i<bars.length; i++) {
-            bars[i].style.display =  "block";
-        }
-        sentences.style.visibility = "visible";
-    }; 
-    */
-
-
-    function stopRecording() {
-        btnStartRecording.disabled = false;
-        camface.stop();
-        canvas.style.display = "none";
-
-        if (isRecordOnlyAudio) {
-            audioRecorder.stopRecording(onStopRecording);
-        }
-
-        if (!isRecordOnlyAudio) {
-            audioRecorder.stopRecording(function() {
-                videoRecorder.stopRecording(function() {
-                    onStopRecording();
-                });
-            });
-        }
-        showResuts();
-    };
-    </script>
-
-    <script>
     window.onbeforeunload = function() {
         btnStartRecording.disabled = false;
     };
     </script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+    <script src="03.js"></script>
 
 </body>
 

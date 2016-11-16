@@ -79,7 +79,8 @@ function serveStatic(response, pathname) {
             'mp4': 'video/mp4',
             'wav': 'audio/wav',
             'ogg': 'audio/ogg',
-            'gif': 'image/gif'
+            'gif': 'image/gif',
+            'css': 'text/css'
         };
 
     response.writeHead(200, {

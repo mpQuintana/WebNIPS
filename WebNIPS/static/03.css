@@ -1,0 +1,21 @@
+#data-table {
+	display: none;
+}
+.bar span {
+	background: #fefefe  0 100% repeat-x;
+}
+.fig0 {
+	background: #747474  0 0 repeat-y;
+}
+.fig1 {
+	background: #65c2e8  0 0 repeat-y;
+}
+.fig2 {
+	background: #eea151  0 0 repeat-y;
+}
+.fig3 {
+	background: #6fdaa0  0 0 repeat-y;
+}
+.fig4 {
+	background: #cc7fe5  0 0 repeat-y;
+}
