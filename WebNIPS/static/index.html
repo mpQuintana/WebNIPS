@@ -2,8 +2,10 @@
 <html>
 
 <head>
-    <meta charset="utf-8" />
-    <title>NIPS Demonstrator</title>
+    <meta charset="utf-8">
+    <title>DEMO NIPS</title>
+    <link rel="stylesheet" href="common.css">
+    <link rel="stylesheet" href="03.css">
     <script>
     if (location.href.indexOf('file:') == 0) {
         document.write('<h1 style="color:red;">Please load this HTML file on HTTP or HTTPS.</h1>');
@@ -17,320 +19,7 @@
     <script src="FaceDetection/bin/js/camface.js"></script> <!-- facial analysis library (captures webcam, coordinates the pipeline) -->
     <script src="FaceDetection/bin/js/face.js"></script>
     <script src="FaceDetection/bin/js/ccv.js"></script>
-    <link rel="stylesheet" href="common.css">
-    <style>
-        html,body {
-            padding:0;
-            margin:0;
-            height:100%;
-            min-height:100%;
-            background-color: white;
-        }
 
-        hr {
-            border: 0;
-            border-top: 1px solid rgb(15, 158, 238);
-        }
-
-        a {
-            color: #2844FA;
-            text-decoration: none;
-        }
-
-        a:hover,
-        a:focus {
-            color: #1B29A4;
-        }
-
-        a:active {
-            color: #000;
-        }
-
-        audio,
-        video {
-            border: 1px solid rgb(15, 158, 238);
-            width: 90%;
-            margin-left: 5%;
-            margin-top: 3%;
-            margin-bottom: 1%;
-            display: none;
-        }
-
-        canvas {
-            margin-left: 5%;
-            margin-top: 3%;
-        }
-
-        button[disabled],
-        input[disabled] {
-            background: rgba(216, 205, 205, 0.2);
-            border: 1px solid rgb(233, 224, 224);
-        }
-
-        /*.traitBar {
-            width: 60%;
-            border: 1px solid black;
-            position: relative;
-            margin-left: 10%;
-            margin-top: 5px;
-            height: 20px;
-        }*/
-
-        .traitBar {
-            width: 60%;
-            border: 1px solid black;
-            position: relative;
-            margin-left: 10%;
-            margin-top: 0;
-            margin-bottom: 0;
-            height: 20px;
-        }
-
-        .jobTraitBar {
-            width: 60%;
-            border: 1px solid black;
-            position: relative;
-            margin-left: 10%;
-            height: 15px;
-            margin-top: 0;
-            margin-bottom: 0;
-            display: none;
-        }
-
-        .trait {
-            position: absolute;
-            left: 30%;
-        }
-
-        .traitFill {
-            height: 20px;
-        }
-
-        .jobTraitFill {
-            height: 15px;
-            background-color: green;
-        }
-
-        /* Table */
-        #data-table {
-            border: none; /* Turn off all borders */
-            border-top: 1px solid #ccc;
-            width: 540px;
-        }
-        #data-table caption {
-            color: #545454;
-            font-size: 14px;
-            font-weight: normal;
-            line-height: 20px;
-            margin: 0 0 20px 0;
-            padding: 0;
-            text-align: center;
-        }
-        #data-table thead {
-            background: #f0f0f0;
-        }
-        #data-table th, 
-        #data-table td {
-            border: none; /* Turn off all borders */
-            border-bottom: 1px solid #ccc;
-            margin: 0;
-            padding: 10px;
-            text-align: left;   
-        }
-
-        /* Toggle */
-        .toggles {
-            background: #ebebeb;    
-            color: #545454;
-            height: 20px;
-            padding: 15px;
-        }
-        .toggles p {
-            margin: 0;
-        }
-        .toggles a {
-            background: #222;
-            border-radius: 3px; 
-            color: #fff;
-            display: block;
-            float: left;
-            margin: 0 10px 0 0;
-            padding: 0 6px;
-            text-decoration: none;
-        }
-        .toggles a:hover {
-            background: #666;
-        }
-        #reset-graph-button {
-            float:right;
-        }
-
-        /* Graph */
-        /* Containers */
-        #wrapper {
-            height: 420px;
-            left: 50%;
-            margin: -210px 0 0 -270px;
-            position: absolute;
-            top: 50%;   
-            width: 540px;
-        }
-        #figure {
-            height: 380px;
-            position: relative;
-        }
-        #figure ul {
-            list-style: none;
-            margin: 0;
-            padding: 0;
-        }
-        .graph {
-            height: 283px;
-            position: relative;
-        }
-
-        /* Legend */
-        .legend {
-            background: #f0f0f0;
-            border-radius: 4px;
-            bottom: 0;
-            position: absolute;
-            text-align: left;
-            width: 540px;   
-        }
-        .legend li {
-            display: block;
-            float: left;
-            height: 20px;
-            margin: 0;
-            padding: 10px 30px;
-            width: 120px;
-        }
-        .legend span.icon {
-            background-position: 50% 0;
-            border-radius: 2px;
-            display: block;
-            float: left;
-            height: 16px;
-            margin: 2px 10px 0 0;
-            width: 16px;    
-        }
-
-        /* X-Axis */
-        .x-axis {
-            bottom: 0;
-            color: #555;
-            position: absolute;
-            text-align: center;
-            width: 540px;
-        }
-        .x-axis li {
-            float: left;
-            margin: 0 15px;
-            padding: 5px 0;
-            width: 76px;    
-        }
-
-        /* Y-Axis */
-        .y-axis {
-            color: #555;
-            position: absolute;
-            text-align: right;
-            width: 100%;
-        }
-        .y-axis li {
-            border-top: 1px solid #ccc;
-            display: block;
-            height: 62px;
-            width: 100%;
-        }
-        .y-axis li span {
-            display: block;
-            margin: -10px 0 0 -60px;
-            padding: 0 10px;
-            width: 40px;
-        }
-
-        /* Graph Bars */
-        .bars {
-            height: 253px;
-            position: absolute;
-            width: 100%;
-            z-index: 10;
-        }
-        .bar-group {
-            float: left;
-            height: 100%;
-            margin: 0 15px;
-            position: relative;
-            width: 100%;
-        }
-        .bar {
-            border-radius: 3px 3px 0 0;
-            bottom: 0;
-            cursor: pointer;    
-            height: 0;
-            position: absolute;
-            text-align: center;
-            width: 20%;
-        }
-        .bar.fig0 {
-            left: 0;
-        }
-        .bar.fig1 {
-            left: 20%;
-        }
-        .bar.fig2 {
-            left: 40%;
-        }
-        .bar.fig3 {
-            left: 60%;
-        }
-        .bar.fig4 {
-            left: 80%;
-        }
-        .bar span {
-            background: #fefefe;
-            border-radius: 3px;
-            left: -8px;
-            display: none;
-            margin: 0;
-            position: relative;
-            text-shadow: rgba(255, 255, 255, 0.8) 0 1px 0;
-            width: 40px;
-            z-index: 20;
-            
-            -webkit-box-shadow: rgba(0, 0, 0, 0.6) 0 1px 4px;
-            box-shadow: rgba(0, 0, 0, 0.6) 0 1px 4px;
-        }
-        .bar:hover span {
-            display: block;
-            margin-top: -25px;
-        }
-
-        #data-table {
-            display: none;
-        }
-        .bar span {
-            background: #fefefe  0 100% repeat-x;
-        }
-        .fig0 {
-            background: #747474  0 0 repeat-y;
-        }
-        .fig1 {
-            background: #65c2e8  0 0 repeat-y;
-        }
-        .fig2 {
-            background: #eea151  0 0 repeat-y;
-        }
-        .fig3 {
-            background: #6fdaa0  0 0 repeat-y;
-        }
-        .fig4 {
-            background: #cc7fe5  0 0 repeat-y;
-        }
-
-    </style>
 </head>
 
 <body>
@@ -400,8 +89,8 @@
         </div>
             <!-- <div id="pieChartJobs" style="width: 100%; height: 500px;">
             </div> -->
-        <div id="wrapperJobs" style="display:block">
-            <div class="chartJobs">
+        <div id="wrapper" style="display: none">
+            <div class="chart">
                 <h2>Job Adjustment</h2>
                 <table id="data-table" border="1" cellpadding="10" cellspacing="0" >
                     <thead>
@@ -413,23 +102,23 @@
                     <tbody>
                         <tr>
                             <th scope="row">Manager</th>
-                            <td>70</td>
+                            <td id="scoreManager">70</td>
                         </tr>
                         <tr>
                             <th scope="row">Social</th>
-                            <td>23</td>
+                            <td id="scoreSocial">23</td>
                         </tr>
                         <tr>
                             <th scope="row">Entrepreneur</th>
-                            <td>12</td>
+                            <td id="scoreEntrepreneur">12</td>
                         </tr>
                         <tr>
                             <th scope="row">Public Sector</th>
-                            <td>100</td>
+                            <td id="scorePublicSector">100</td>
                         </tr>
                         <tr>
                             <th scope="row">Scientist</th>
-                            <td>3</td>
+                            <td id="scoreScientist">3</td>
                         </tr>
                     </tbody>
                 </table>
@@ -437,7 +126,204 @@
         </div>
     </div>
 
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+
+    <script> 
     
+    </script>
+
+
+    <script>   
+        // Here be graphs
+        function createGraph(data, container) {
+            // Declare some common variables and container elements 
+            console.log("OK call");
+            var bars = [];
+            var figureContainer = $('<div id="figure"></div>');
+            var graphContainer = $('<div class="graph"></div>');
+            var barContainer = $('<div class="bars"></div>');
+            var data = $(data);
+            var container = $(container);
+            var chartData;      
+            var chartYMax;
+            var columnGroups;
+            
+            // Timer variables
+            var barTimer;
+            var graphTimer;
+            
+            // Create table data object
+            var tableData = {
+                // Get numerical data from table cells
+                chartData: function() {
+                    var chartData = [];
+                    data.find('tbody td').each(function() {
+                        chartData.push($(this).text());
+                    });
+                    return chartData;
+                },
+                // Get heading data from table caption
+                chartHeading: function() {
+                    var chartHeading = data.find('caption').text();
+                    return chartHeading;
+                },
+                // Get legend data from table body
+                chartLegend: function() {
+                    var chartLegend = [];
+                    // Find th elements in table body - that will tell us what items go in the main legend
+                    data.find('tbody th').each(function() {
+                        chartLegend.push($(this).text());
+                    });
+                    return chartLegend;
+                },
+                // Get highest value for y-axis scale
+                chartYMax: function() {
+                    var chartData = this.chartData();
+                    // Round off the value
+                    var chartYMax = 100;
+                    return chartYMax;
+                },
+                // Get y-axis data from table cells
+                yLegend: function() {
+                    var chartYMax = this.chartYMax();
+                    var yLegend = [];
+                    // Number of divisions on the y-axis
+                    var yAxisMarkings = 5;                      
+                    // Add required number of y-axis markings in order from 0 - max
+                    for (var i = 0; i < yAxisMarkings; i++) {
+                        yLegend.unshift(((chartYMax * i) / (yAxisMarkings - 1)) );
+                    }
+                    return yLegend;
+                },
+                // Get x-axis data from table header
+                xLegend: function() {
+                    var xLegend = [];
+                    // Find th elements in table header - that will tell us what items go in the x-axis legend
+                    data.find('thead th').each(function() {
+                        xLegend.push($(this).text());
+                    });
+                    return xLegend;
+                },
+                // Sort data into groups based on number of columns
+                columnGroups: function() {
+                    var columnGroups = [];
+                    // Get number of columns from first row of table body
+                    var columns = data.find('tbody tr:eq(0) td').length;
+                    for (var i = 0; i < columns; i++) {
+                        columnGroups[i] = [];
+                        data.find('tbody tr').each(function() {
+                            columnGroups[i].push($(this).find('td').eq(i).text());
+                        });
+                    }
+                    return columnGroups;
+                }
+            }
+            
+            // Useful variables for accessing table data        
+            chartData = tableData.chartData();      
+            chartYMax = tableData.chartYMax();
+            columnGroups = tableData.columnGroups();
+            
+            // Construct the graph
+            
+            // Loop through column groups, adding bars as we go
+            $.each(columnGroups, function(i) {
+                // Create bar group container
+                var barGroup = $('<div class="bar-group"></div>');
+                // Add bars inside each column
+                for (var j = 0, k = columnGroups[i].length; j < k; j++) {
+                    // Create bar object to store properties (label, height, code etc.) and add it to array
+                    // Set the height later in displayGraph() to allow for left-to-right sequential display
+                    var barObj = {};
+                    barObj.label = this[j];
+                    barObj.height = Math.floor(barObj.label / chartYMax * 100) + '%';
+                    barObj.bar = $('<div class="bar fig' + j + '"><span>' + barObj.label + '</span></div>')
+                        .appendTo(barGroup);
+                    bars.push(barObj);
+                }
+                // Add bar groups to graph
+                barGroup.appendTo(barContainer);            
+            });
+            
+            // Add heading to graph
+            var chartHeading = tableData.chartHeading();
+            var heading = $('<h4>' + chartHeading + '</h4>');
+            heading.appendTo(figureContainer);
+            
+            // Add legend to graph
+            var chartLegend = tableData.chartLegend();
+            var legendList  = $('<ul class="legend"></ul>');
+            $.each(chartLegend, function(i) {           
+                var listItem = $('<li><span class="icon fig' + i + '"></span>' + this + '</li>')
+                    .appendTo(legendList);
+            });
+            legendList.appendTo(figureContainer);
+            
+            // Add x-axis to graph
+            var xLegend = tableData.xLegend();      
+            var xAxisList   = $('<ul class="x-axis"></ul>');
+            $.each(xLegend, function(i) {           
+                var listItem = $('<li><span>' + this + '</span></li>')
+                    .appendTo(xAxisList);
+            });
+            xAxisList.appendTo(graphContainer);
+            
+            // Add y-axis to graph  
+            var yLegend = tableData.yLegend();
+            var yAxisList   = $('<ul class="y-axis"></ul>');
+            $.each(yLegend, function(i) {           
+                var listItem = $('<li><span>' + this + '</span></li>')
+                    .appendTo(yAxisList);
+            });
+            yAxisList.appendTo(graphContainer);     
+            
+            // Add bars to graph
+            barContainer.appendTo(graphContainer);      
+            
+            // Add graph to graph container     
+            graphContainer.appendTo(figureContainer);
+            
+            // Add graph container to main container
+            figureContainer.appendTo(container);
+            
+            // Set individual height of bars
+            function displayGraph(bars, i) {        
+                // Changed the way we loop because of issues with $.each not resetting properly
+                if (i < bars.length) {
+                    // Animate height using jQuery animate() function
+                    $(bars[i].bar).animate({
+                        height: bars[i].height
+                    }, 800);
+                    // Wait the specified time then run the displayGraph() function again for the next bar
+                    barTimer = setTimeout(function() {
+                        i++;                
+                        displayGraph(bars, i);
+                    }, 100);
+                }
+            }
+            
+            // Reset graph settings and prepare for display
+            function resetGraph() {
+                // Stop all animations and set bar height to 0
+                $.each(bars, function(i) {
+                    $(bars[i].bar).stop().css('height', 0);
+                });
+                
+                // Clear timers
+                clearTimeout(barTimer);
+                clearTimeout(graphTimer);
+                
+                // Restart timer        
+                graphTimer = setTimeout(function() {        
+                    displayGraph(bars, 0);
+                }, 200);
+            }
+            
+            // Finally, display graph via reset function
+            resetGraph();
+        }   
+
+    </script>
 
     <script>
     // fetching DOM references
@@ -447,7 +333,7 @@
     var videoElement = document.querySelector('#videoRecord');
     var videoDiv = document.querySelector('#videoDiv');
     var videoAvatar = document.querySelector('#videoAvatar');
-    var jobs = document.querySelector('#wrapperJobs');
+    var jobs = document.querySelector('#wrapper');
     var sentences = document.querySelector('#sentences');
     var results = document.querySelector('#results');
     var progressBar = document.querySelector('#progress-bar');
@@ -632,33 +518,13 @@
         }
 
         function showJobResults(OCEANvalues){
-          var jobAdjustment = calculateJobAdjustmentFromOCEAN(OCEANvalues);
-          /*google.charts.load('current', {'packages':['corechart']});
-          google.charts.setOnLoadCallback(drawChart);
-          function drawChart() {
+            var jobAdjustment = calculateJobAdjustmentFromOCEAN(OCEANvalues);
 
-            var data = google.visualization.arrayToDataTable([
-              ['Job', 'Adjustment'],
-              ['Manager',       jobAdjustment[0]],
-              ['Entrepreneur',  jobAdjustment[1]],
-              ['Social',        jobAdjustment[2]],
-              ['Public Sector', jobAdjustment[3]],
-              ['Scientists',    jobAdjustment[4]],
-            ]);
+            jobs.style.display = "block";
+            scrManager = document.querySelector('#scoreManager');
+            scrManager.innerHTML = jobAdjustment[0];
+            createGraph('#data-table', '.chart');
 
-            var options = {
-              title: 'Job Adjustment',
-              is3D: true,
-            };
-
-
-            var chart = new google.visualization.PieChart(document.getElementById('pieChartJobs'));
-            chart.draw(data, options);
-          }*/
-          jobs.style.display = "block";
-
-          
-          //createGraph('#data-table', '.chart');
         }
     </script>
 
@@ -739,6 +605,7 @@
         <script>
     // reusable helpers
 
+
     // this function submits both audio/video or single recorded blob to nodejs server
     function postFiles(audio, video) {
         // getting unique identifier for the file name
@@ -767,13 +634,7 @@
         videoElement.src = '';
         videoElement.poster = '/ajax-loader.gif';
 
-        xhr('/upload', JSON.stringify(files), function(_fileName) {
-            //var href = location.href.substr(0, location.href.lastIndexOf('/') + 1);
-            //videoElement.src = href + 'uploads/' + _fileName;
-            //videoElement.play();
-            //videoElement.muted = false;
-            //videoElement.controls = true;
-        });
+        xhr('/upload', JSON.stringify(files))
 
         if (mediaStream) mediaStream.stop();
         
@@ -839,6 +700,14 @@
         });
         
     }
+
+    function sendMail(){
+        mailInfo = {};
+        mailInfo.sender = "testnodejs@gmail.com";
+        mailInfo.pwd = "nipstac2016";
+        xhr('/sendMail', JSON.stringify(mailInfo));
+    }
+    //sendMail();
     </script>
 
     <script>
@@ -861,8 +730,6 @@
         btnStartRecording.disabled = false;
     };
     </script>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
-    <script src="03.js"></script>
 
 </body>
 

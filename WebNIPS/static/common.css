@@ -38,6 +38,7 @@ html,body {
         canvas {
             margin-left: 5%;
             margin-top: 3%;
+            width: 90%;
         }
 
         button[disabled],
@@ -147,12 +148,13 @@ html,body {
         /* Graph */
         /* Containers */
         #wrapper {
-            height: 420px;
+            /*height: 420px;
             left: 50%;
-            margin: -210px 0 0 -270px;
             position: absolute;
-            top: 50%;   
-            width: 540px;
+            top: 50%;   */
+            width: 90%;
+            margin: 3%;
+
         }
         #figure {
             height: 380px;
