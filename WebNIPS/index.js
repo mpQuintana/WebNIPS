@@ -1,6 +1,3 @@
-// Muaz Khan     - www.MuazKhan.com
-// MIT License   - www.WebRTC-Experiment.com/licence
-// Source Code   - github.com/muaz-khan/WebRTC-Experiment/tree/master/RecordRTC/RecordRTC-to-Nodejs
 
 var server = require('./server'),
     handlers = require('./handlers'),
@@ -10,6 +7,7 @@ var server = require('./server'),
 handle["/"] = handlers.home;
 handle["/home"] = handlers.home;
 handle["/upload"] = handlers.upload;
+handle["/sendMail"] = handlers.sendMail;
 handle._static = handlers.serveStatic;
 
 server.start(router.route, handle);

@@ -46,5 +46,9 @@
   },
   "homepage": "https://github.com/muaz-khan/WebRTC-Experiment/tree/master/RecordRTC/RecordRTC-to-Nodejs",
   "_id": "recordrtc-nodejs@1.0.0",
-  "_from": "recordrtc-nodejs@"
+  "_from": "recordrtc-nodejs@",
+  "dependencies": {
+    "nodemailer": "^2.6.4",
+    "nodemailer-smtp-transport": "^2.7.2"
+  }
 }

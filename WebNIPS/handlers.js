@@ -1,6 +1,3 @@
-// Muaz Khan     - www.MuazKhan.com
-// MIT License   - www.WebRTC-Experiment.com/licence
-// Source Code   - github.com/muaz-khan/WebRTC-Experiment/tree/master/RecordRTC/RecordRTC-to-Nodejs
 
 var config = require('./config'),
     fs = require('fs'),
@@ -15,6 +12,42 @@ function home(response) {
 }
 
 // this function uploads files
+
+function sendMail(response, mailData){
+    var mailInfo = JSON.parse(mailData);
+    //TEST MAIL WITH NODEMAILER
+    console.log("TEST CONSOLA-----");
+    var nodemailer = require('nodemailer');
+    var smtpTransport = require('nodemailer-smtp-transport');
+
+    // create reusable transporter object using the default SMTP transport
+    var transporter = nodemailer.createTransport('smtps://testnodejsmail@gmail.com:nipstac2016@smtp.gmail.com');
+
+    // setup e-mail data with unicode symbols
+    var mailOptions = {
+        from: '"Test NIPS" <testnodejsmail@gmail.com>', // sender address
+        to: 'marcperez1993@gmail.com', // list of receivers
+        subject: 'TESTING mail PDF', // Subject line
+        text: 'Hello world with PDF', // plaintext body
+        html: '<b>Hello world </b>', // html body
+        attachments: [{
+            filename: 'file.pdf',
+            path: 'C:/Users/marcp_000/Desktop/TFG/the_use_ofpersonalitymeasures.pdf',
+            contentType: 'application/pdf'
+          }],
+    };
+
+    // send mail with defined transport object
+    transporter.sendMail(mailOptions, function(error, info){
+        if(error){
+            return console.log(error);
+        }
+        console.log('Message sent: ' + info.response);
+    });
+
+    response.end();
+
+}
 
 function upload(response, postData) {
     var files = JSON.parse(postData);
@@ -79,7 +112,8 @@ function serveStatic(response, pathname) {
             'mp4': 'video/mp4',
             'wav': 'audio/wav',
             'ogg': 'audio/ogg',
-            'gif': 'image/gif'
+            'gif': 'image/gif',
+            'css': 'text/css'
         };
 
     response.writeHead(200, {
@@ -166,4 +200,5 @@ function ifMac(response, files) {
 
 exports.home = home;
 exports.upload = upload;
+exports.sendMail = sendMail;
 exports.serveStatic = serveStatic;
